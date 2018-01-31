@@ -1,0 +1,26 @@
+{
+  "name": "stub-api",
+  "version": "1.0.0",
+  "description": "Stub versions of 3rd party API's",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LBU-TeamHSBC/stub-api.git"
+  },
+  "author": "TeamHSBC",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LBU-TeamHSBC/stub-api/issues"
+  },
+  "homepage": "https://github.com/LBU-TeamHSBC/stub-api#readme",
+  "private": true,
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "faker": "^4.1.0",
+    "json-server": "^0.12.1"
+  }
+}
