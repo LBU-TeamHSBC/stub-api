@@ -2,15 +2,17 @@ var faker = require('faker');
 var express = require('express');
 var router = express.Router();
 
+// Get user details
 router.get('/users/:username', function(req, res, next) {
     const user = req.params.username;
-    const data = mkData(user);
+    const data = mkUserData(user);
     res.send(data);
 });
 
+// Get authed user data
 router.get('/user', function(req, res, next) {
     const user = req.params.username;
-    const data = mkData(user);
+    const data = mkUserData(user);
     const extras = {
         "two_factor_authentication": true,
         "total_private_repos": 100,
@@ -23,7 +25,34 @@ router.get('/user', function(req, res, next) {
     res.send(Object.assign(data, extras));
 });
 
-const mkData = user => ({
+// Get list of repos for user
+router.get('/users/:username/repos', function(req, res, next) {
+    data = []
+    let repoCount = parseInt((Math.random() * 20) + 1);
+    for (let i=0; i<repoCount; ++i) {
+        data.push({
+            id: parseInt(Math.random() * 1000000, 10),
+            name: faker.lorem.words(2),
+            forks_count: faker.random.number(100)
+        });
+    }
+    res.send(data);
+});
+
+// Get languages for repo
+router.get('/repos/:username/:repo/languages', function(req, res, next) {
+    const data = {};
+    const languages = ['c','python','javascript','java','rust','go','kotlin'];
+    const langCount = parseInt((Math.random() * 3) + 1);
+    for (let i=0; i<langCount; ++i) {
+        let id = parseInt(Math.random() * languages.length);
+        let lang = languages[id];
+        data[lang] = faker.random.number(90000);
+    }
+    res.send(data)
+});
+
+const mkUserData = user => ({
     "login": user,
     "id": parseInt(Math.random() * 1000000, 10),
     "avatar_url": faker.image.avatar(),
@@ -50,7 +79,7 @@ const mkData = user => ({
     "bio": "There once was...",
     "public_repos": 2,
     "public_gists": 1,
-    "followers": 20,
+    "followers": faker.random.number(),
     "following": 0,
     "created_at": "2008-01-14T04:33:35Z",
     "updated_at": "2008-01-14T04:33:35Z"
