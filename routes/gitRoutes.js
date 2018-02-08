@@ -28,10 +28,10 @@ router.get('/user', function(req, res, next) {
 // Get list of repos for user
 router.get('/users/:username/repos', function(req, res, next) {
     data = []
-    let repoCount = parseInt((Math.random() * 20) + 1);
+    let repoCount = faker.random.number({min: 1, max: 20});
     for (let i=0; i<repoCount; ++i) {
         data.push({
-            id: parseInt(Math.random() * 1000000, 10),
+            id: faker.random.number({min: 10, max: 1000000}),
             name: faker.lorem.words(2),
             forks_count: faker.random.number(100)
         });
@@ -43,9 +43,9 @@ router.get('/users/:username/repos', function(req, res, next) {
 router.get('/repos/:username/:repo/languages', function(req, res, next) {
     const data = {};
     const languages = ['c','python','javascript','java','rust','go','kotlin'];
-    const langCount = parseInt((Math.random() * 3) + 1);
+    const langCount = faker.random.number({min: 1, max: 4});
     for (let i=0; i<langCount; ++i) {
-        let id = parseInt(Math.random() * languages.length);
+        let id = faker.random.number(languages.length - 1);
         let lang = languages[id];
         data[lang] = faker.random.number(90000);
     }
@@ -54,7 +54,7 @@ router.get('/repos/:username/:repo/languages', function(req, res, next) {
 
 const mkUserData = user => ({
     "login": user,
-    "id": parseInt(Math.random() * 1000000, 10),
+    "id": faker.random.number({min: 10, max: 1000000}),
     "avatar_url": faker.image.avatar(),
     "gravatar_id": "",
     "url": "https://api.github.com/users/" + user,
