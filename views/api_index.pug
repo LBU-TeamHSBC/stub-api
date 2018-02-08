@@ -1,0 +1,11 @@
+html
+    body
+        h1
+            |API for #{api_provider}
+            |
+            span(style="font-size: 0.65em") (#{version})
+        ul
+            for ep in endpoints
+                dl
+                    dt: b #{base_url}#{ep.link}
+                    dd #{ep.info}

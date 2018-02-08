@@ -2,6 +2,24 @@ var faker = require('faker');
 var express = require('express');
 var router = express.Router();
 
+router.get('/', (req, res) => {
+    const version = 'v1.0.0';
+    const api_provider = 'GitHub';
+    const endpoints = [
+        { link: '/users/:username', info: 'Get general information about specific user' },
+        { link: '/users/:username/repos', info: 'List of repositories for user' },
+        { link: '/user', info: 'Get general information about currently authenticated user' },
+        { link: '/repos/:username/:repo/languages', info: 'Get language stats for individual repository' }
+    ];
+    
+    res.render('api_index', {
+        base_url: req.baseUrl,
+        version,
+        api_provider,
+        endpoints
+    });
+});
+
 // Get user details
 router.get('/users/:username', function(req, res, next) {
     const user = req.params.username;

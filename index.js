@@ -1,5 +1,6 @@
 const config = require('./config');
 
+const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 
@@ -9,6 +10,9 @@ const udemyRoutes = require('./routes/udemyRoutes');
 const lbuRoutes = require('./routes/lbuRoutes');
 
 const app = express();
+
+app.set('views', path.join(__dirname, 'views'));                                                                       
+app.set('view engine', 'pug');
 
 app.use(express.static(__dirname + '/public'));
 
