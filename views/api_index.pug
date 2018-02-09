@@ -1,11 +1,14 @@
 html
+    head
+        link(rel="stylesheet", href="css/default.css")
     body
         h1
             |API for #{api_provider}
-            |
-            span(style="font-size: 0.65em") (#{version})
-        ul
+            span(style="font-size: 0.65em") &nbsp;(#{version})
+        a(href="../") Home
+        dl
             for ep in endpoints
-                dl
-                    dt: b #{base_url}#{ep.link}
-                    dd #{ep.info}
+                dt
+                    for method in ep.methods
+                        span(class="method " + method)
+                    b: a(href=base_url + ep.link) #{base_url}#{ep.link}

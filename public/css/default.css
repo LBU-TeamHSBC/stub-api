@@ -1,0 +1,52 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+a, a:visited {
+    padding: 5px;
+    color: black;
+    text-decoration: none;
+    border-radius: 25px;
+}
+
+a:hover {
+    background: #CCC;
+}
+
+dl {
+    margin-left: 16px;
+}
+
+dt, li {
+    margin-top: 16px;
+}
+
+span.method::after {
+    margin-right: 5px;
+    padding: 2px 5px 2px 5px;
+    border-radius: 25px;
+    font-size: 0.7em;
+    font-weight: bold;
+    color: white;
+    box-shadow: #000 1px 1px 5px;
+}
+
+span.get::after {
+    content: "GET";
+    background: rgb(51, 53, 206);
+}
+
+span.post::after {
+    content: "POST";
+    background: rgb(64, 204, 51);
+}
+
+span.put::after {
+    content: "PUT";
+    background: rgb(204, 143, 51);
+}
+
+span.delete::after {
+    content: "DELETE";
+    background: rgb(204, 51, 51);
+}

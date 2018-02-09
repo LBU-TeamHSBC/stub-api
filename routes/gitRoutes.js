@@ -2,30 +2,8 @@ var faker = require('faker');
 var express = require('express');
 var router = express.Router();
 
-router.get('/', (req, res) => {
-    const version = 'v1.0.0';
-    const api_provider = 'GitHub';
-    const endpoints = [
-        { link: '/users/:username', info: 'Get general information about specific user' },
-        { link: '/users/:username/repos', info: 'List of repositories for user' },
-        { link: '/user', info: 'Get general information about currently authenticated user' },
-        { link: '/repos/:username/:repo/languages', info: 'Get language stats for individual repository' }
-    ];
-    
-    res.render('api_index', {
-        base_url: req.baseUrl,
-        version,
-        api_provider,
-        endpoints
-    });
-});
-
-// Get user details
-router.get('/users/:username', function(req, res, next) {
-    const user = req.params.username;
-    const data = mkUserData(user);
-    res.send(data);
-});
+const version = 'v1.0.0';
+const api_provider = 'GitHub';
 
 // Get authed user data
 router.get('/user', function(req, res, next) {
@@ -41,6 +19,14 @@ router.get('/user', function(req, res, next) {
         "collaborators": 8
     };
     res.send(Object.assign(data, extras));
+});
+
+
+// Get user details
+router.get('/users/:username', function(req, res, next) {
+    const user = req.params.username;
+    const data = mkUserData(user);
+    res.send(data);
 });
 
 // Get list of repos for user
@@ -60,7 +46,10 @@ router.get('/users/:username/repos', function(req, res, next) {
 // Get languages for repo
 router.get('/repos/:username/:repo/languages', function(req, res, next) {
     const data = {};
-    const languages = ['c','python','javascript','java','rust','go','kotlin'];
+    const languages = [
+        'bash', 'c', 'c++', 'go', 'java', 'javascript',
+        'kotlin', 'lua', 'python', 'rust', 'sql'
+    ];
     const langCount = faker.random.number({min: 1, max: 4});
     for (let i=0; i<langCount; ++i) {
         let id = faker.random.number(languages.length - 1);
@@ -101,6 +90,19 @@ const mkUserData = user => ({
     "following": 0,
     "created_at": "2008-01-14T04:33:35Z",
     "updated_at": "2008-01-14T04:33:35Z"
+});
+
+router.get('/', (req, res) => {
+    var endpoints = [];
+    router.stack
+        .filter(r => r.route.path !== '/')
+        .forEach(r => {
+            endpoints.push({
+                link: r.route.path,
+                methods: Object.keys(r.route.methods).sort()
+            });
+        });
+    res.render('api_index', { base_url: req.baseUrl, version, api_provider, endpoints });
 });
 
 module.exports = router;
