@@ -2,7 +2,6 @@ var faker = require('faker');
 var express = require('express');
 var router = express.Router();
 
-
 router.get('/user', function(req, res, next) {
     const user = req.params.username;
     const data = mkData(user);
@@ -11,7 +10,7 @@ router.get('/user', function(req, res, next) {
     res.send(Object.assign(data, extras));
 });
 
-  var coursesAvailable = [
+var coursesAvailable = [
    "Become a Professional React Developer",
    "Intro to Programming Nanodegree",
    "Become a VR Developer",
@@ -19,19 +18,19 @@ router.get('/user', function(req, res, next) {
    "Become a Data Analyst",
    "Intro to Artificial Intelligence",
    "Intro to Data Science"
-   ]
+];
 
-   var profile = new Array();
+var profile = [];
 
 function genCourses(noOfCourses) {
-
-    for (var i = 0; i < noOfCourses; i++)
+    profile = [];
+    for (var i = 0; i < noOfCourses; i++) {
         profile.push(new Object(
             {"CourseTitle" : coursesAvailable[i],
             "CourseCompletion" : faker.random.number({max:6})}
         ));
-
-        return profile;
+    }
+    return profile;
 }
 
 const mkData = user => ({
@@ -41,6 +40,6 @@ const mkData = user => ({
     "Number of Subscribed Courses" : profile.length,
     "name": faker.name.firstName() + " " + faker.name.lastName(),
     "email": faker.internet.email(),
-    });
+});
 
 module.exports = router;
