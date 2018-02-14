@@ -20,16 +20,12 @@ var moduleList = ['stuff', 'more stuff', 'even more stuff', 'you get the idea...
 function courseGen(noOfModules) {
     var profile = [];
     for (var i = 0; i < noOfModules; i++){
-        for (var a = 0; a < noOfModules; a++){
-            profile.push(new Object(
-                {"ModuleTitle" : moduleList[Math.floor(Math.random() * moduleList.length)],
-                "ModuleCompletion" : faker.random.number({max:100})
-            }
-            ));
-        }
-        
-    return profile;
+        profile.push({
+            "ModuleTitle" : moduleList[Math.floor(Math.random() * moduleList.length)],
+            "ModuleCompletion" : faker.random.number({max:100})
+        });
     }
+    return profile;
 }
 
 const mkData = user => ({
@@ -42,8 +38,11 @@ const mkData = user => ({
     "name": faker.name.firstName() + " " + faker.name.lastName(),
     "location": faker.address.country(),
     "email": faker.internet.email(),
-    "age": faker.random.number({min:16, max:99}),
-    "Modules:": courseGen(faker.random.number({min:1, max:moduleList.length - 1})),
+    "age": faker.random.number({min:16, max:50}),
+    "Profile:": {
+       "Modules:": courseGen(faker.random.number({min:1, max:moduleList.length - 1})),
+       "Attendace:": faker.random.number({max:100})
+    },
     "created_at": "2008-01-14T04:33:35Z",
     "updated_at": "2008-01-14T04:33:35Z"
 });
