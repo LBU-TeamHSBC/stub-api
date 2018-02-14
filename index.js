@@ -7,6 +7,8 @@ const bodyParser = require('body-parser');
 const gitRoutes = require('./routes/gitRoutes');
 const udemyRoutes = require('./routes/udemyRoutes');
 const lbuRoutes = require('./routes/lbuRoutes');
+const udacityRoutes = require('./routes/Udacity');
+
 
 const app = express();
 
@@ -15,6 +17,8 @@ app.use(express.static(__dirname + '/public'));
 app.use('/git', gitRoutes);
 app.use('/udemy', udemyRoutes);
 app.use('/lbu', lbuRoutes);
+app.use('/Udacity', udacityRoutes);
+
 
 app.use(bodyParser.json());
 const port = config.server.port;
@@ -22,3 +26,6 @@ const port = config.server.port;
 app.listen(port, () => {
   console.log('Server listening on port: ' + port);
 });
+
+
+
