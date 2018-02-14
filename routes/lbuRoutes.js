@@ -17,14 +17,19 @@ router.get('/user', function(req, res, next) {
     res.send(Object.assign(data));
 });
 
-var moduleList = ['stuff', 'more stuff', 'even more stuff', 'you get the idea...'];
+
+var courseList = ['Computer Science', 'Business', 'Computing', 'Sports', 'Physiology', 'Electrical Engineering'];
+var moduleList = ['Fundamentals of Computer Science', 'Developing the Computer Scientist', 'Networking', 'Java Fundamentals',
+ 'Advanced Java', 'Developing C++ appications', 'Web Development', 'Database Fundamentals'];
 
 function courseGen(noOfModules) {
     var profile = [];
     for (var i = 0; i < noOfModules; i++){
         profile.push({
+            "ModuleId" : faker.random.number({max:999999}),
             "ModuleTitle" : moduleList[Math.floor(Math.random() * moduleList.length)],
-            "ModuleCompletion" : faker.random.number({max:100})
+            "ModuleCompletion" : faker.random.number({max:100}),
+            "Random" : faker.random.word()
         });
     }
     return profile;
@@ -41,9 +46,12 @@ const mkData = user => ({
     "location": faker.address.country(),
     "email": faker.internet.email(),
     "age": faker.random.number({min:16, max:50}),
-    "Profile:": {
-       "Modules:": courseGen(faker.random.number({min:1, max:moduleList.length - 1})),
-       "Attendace:": faker.random.number({max:100})
+    "profile": {
+        "course": {
+            "id": courseList[Math.floor(Math.random() * courseList.length)],
+            "modules": courseGen(faker.random.number({min:1, max:6})),
+            "attendace": faker.random.number({max:100})
+        }
     },
     "created_at": "2008-01-14T04:33:35Z",
     "updated_at": "2008-01-14T04:33:35Z"
