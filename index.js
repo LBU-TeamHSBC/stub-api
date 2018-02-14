@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 const gitRoutes = require('./routes/gitRoutes');
 const udemyRoutes = require('./routes/udemyRoutes');
 const lbuRoutes = require('./routes/lbuRoutes');
-const udacityRoutes = require('./routes/udacity');
+const udacityRoutes = require('./routes/udacityRoutes');
 
 
 const app = express();
@@ -21,7 +21,7 @@ app.use(express.static(__dirname + '/public'));
 app.use('/git', gitRoutes);
 app.use('/udemy', udemyRoutes);
 app.use('/lbu', lbuRoutes);
-app.use('/Udacity', udacityRoutes);
+app.use('/udacity', udacityRoutes);
 
 
 app.use(bodyParser.json());
