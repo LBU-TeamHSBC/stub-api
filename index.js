@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 const gitRoutes = require('./routes/gitRoutes');
 const udemyRoutes = require('./routes/udemyRoutes');
 const lbuRoutes = require('./routes/lbuRoutes');
-const udacityRoutes = require('./routes/Udacity');
+const udacityRoutes = require('./routes/udacity');
 
 
 const app = express();

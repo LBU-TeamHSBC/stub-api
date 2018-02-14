@@ -2,6 +2,8 @@ var faker = require('faker');
 var express = require('express');
 var router = express.Router();
 
+const version = 'v1.0.0';
+const api_provider = 'LBU';
 
 router.get('/users/:username', function(req, res, next) {
     const user = req.params.username;
@@ -45,6 +47,19 @@ const mkData = user => ({
     },
     "created_at": "2008-01-14T04:33:35Z",
     "updated_at": "2008-01-14T04:33:35Z"
+});
+
+router.get('/', (req, res) => {
+    var endpoints = [];
+    router.stack
+        .filter(r => r.route.path !== '/')
+        .forEach(r => {
+            endpoints.push({
+                link: r.route.path,
+                methods: Object.keys(r.route.methods).sort()
+            });
+        });
+    res.render('api_index', { base_url: req.baseUrl, version, api_provider, endpoints });
 });
 
 module.exports = router;
