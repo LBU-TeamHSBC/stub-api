@@ -2,15 +2,19 @@ var faker = require('faker');
 var express = require('express');
 var router = express.Router();
 
-const version = 'v1.0.0';
+const version = 'v1.1.0';
 const api_provider = 'Udacity';
 
 router.get('/user', function(req, res, next) {
     const user = req.params.username;
-    const data = mkData(user);
-    const extras = {
-            };
-    res.send(Object.assign(data, extras));
+    const data = mkData(user);;
+    res.send(data);
+});
+
+router.get('/course', function(req, res, next) {
+    const user = req.params.username;
+    const data = mkCourse(user);
+    res.send(data);
 });
 
 var coursesAvailable = [
@@ -25,25 +29,50 @@ var coursesAvailable = [
 
 var profile = [];
 
-function genCourses(noOfCourses) {
+function genUsers(noOfCourses) {
     profile = [];
     for (var i = 0; i < noOfCourses; i++) {
         profile.push(new Object(
             {"CourseTitle" : coursesAvailable[i],
-            "CourseCompletion" : faker.random.number({max:6})}
-        ));
+            "CourseCompletion" : faker.random.number({max:6}),
+            "CourseID": parseInt(Math.random() * 1000000, 10),
+            "CourseRating": faker.random.number({max:5}),       
+            "CourseParticipants":faker.random.number({max:100000})
+             }));
     }
     return profile;
+}
+
+var courseProfile = [];
+
+function genCourses() {
+    courseProfile = [];
+    for (var i = 0; i < coursesAvailable.length; i++) {
+        courseProfile.push(new Object(
+            {"CourseTitle" : coursesAvailable[i],
+            "CourseID": parseInt(Math.random() * 1000000, 10),
+            "CourseRating": faker.random.number({max:5}),       
+            "CourseParticipants":faker.random.number({max:100000})
+        
+             } ));
+    }
+    return courseProfile;
 }
 
 const mkData = user => ({
     "login": user,
     "id": parseInt(Math.random() * 1000000, 10),
-    "Course": genCourses(faker.random.number({max:5})),
+    "Course": genUsers(faker.random.number({max:5})),
     "Number of Subscribed Courses" : profile.length,
     "name": faker.name.firstName() + " " + faker.name.lastName(),
     "email": faker.internet.email(),
 });
+
+const mkCourse = user => ({
+    "no of courses" : coursesAvailable.length,
+    "courses": genCourses()
+});
+
 
 router.get('/', (req, res) => {
     var endpoints = [];
