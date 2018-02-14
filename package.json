@@ -23,6 +23,6 @@
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "faker": "^4.1.0",
-    "json-server": "^0.12.1"
+    "pug": "^2.0.0-rc.4"
   }
 }
