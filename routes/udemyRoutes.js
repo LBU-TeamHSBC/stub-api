@@ -2,6 +2,8 @@ var express = require('express');
 var faker = require('faker');
 var router = express.Router();
 
+const version = 'v1.0.0';
+const api_provider = 'Udemy';
 
 router.get('/user', function(req, res) {
     const user = req.params.username;
@@ -53,6 +55,19 @@ var mkData = user => ({
     "Course": genCourses(faker.random.number({min:1,max:10})),
     "Number of Subscribed Courses" : profile.length,
     "updated_at": faker.date.recent()
+});
+
+router.get('/', (req, res) => {
+    var endpoints = [];
+    router.stack
+        .filter(r => r.route.path !== '/')
+        .forEach(r => {
+            endpoints.push({
+                link: r.route.path,
+                methods: Object.keys(r.route.methods).sort()
+            });
+        });
+    res.render('api_index', { base_url: req.baseUrl, version, api_provider, endpoints });
 });
 
 module.exports = router;

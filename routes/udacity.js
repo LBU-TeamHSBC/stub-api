@@ -2,6 +2,9 @@ var faker = require('faker');
 var express = require('express');
 var router = express.Router();
 
+const version = 'v1.0.0';
+const api_provider = 'Udacity';
+
 router.get('/user', function(req, res, next) {
     const user = req.params.username;
     const data = mkData(user);
@@ -40,6 +43,19 @@ const mkData = user => ({
     "Number of Subscribed Courses" : profile.length,
     "name": faker.name.firstName() + " " + faker.name.lastName(),
     "email": faker.internet.email(),
+});
+
+router.get('/', (req, res) => {
+    var endpoints = [];
+    router.stack
+        .filter(r => r.route.path !== '/')
+        .forEach(r => {
+            endpoints.push({
+                link: r.route.path,
+                methods: Object.keys(r.route.methods).sort()
+            });
+        });
+    res.render('api_index', { base_url: req.baseUrl, version, api_provider, endpoints });
 });
 
 module.exports = router;
