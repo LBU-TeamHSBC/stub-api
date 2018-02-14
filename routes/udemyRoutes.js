@@ -21,15 +21,18 @@ var courses = ["Blockchain and Bitcoin Fundamentals",
     "REST APIs with Flask and Python",
     "AWS Serverless APIs & Apps - A Complete Introduction"];
 
-var profile = new Array();
+var profile = [];
 
 function genCourses(noOfCourses) {
 
-    for (var i = 0; i < noOfCourses; i++)
+    profile = [];
+
+    for (var i = 0; i < noOfCourses; i++) {
         profile.push(new Object(
             {"CourseTitle" : courses[i],
-            "CourseCompletion" : faker.random.number({max:15})}
+                "CourseCompletion" : faker.random.number({max:15})}
         ));
+    }
 
     return profile
 }
@@ -45,7 +48,7 @@ var mkData = user => ({
     "blog": faker.internet.url(),
     "location": faker.address.state(),
     "email": faker.internet.email(),
-    "Course": genCourses(faker.random.number({max:5})),
+    "Course": genCourses(faker.random.number({min:1,max:10})),
     "Number of Subscribed Courses" : profile.length,
     "updated_at": "2008-01-14T04:33:35Z"
 });
