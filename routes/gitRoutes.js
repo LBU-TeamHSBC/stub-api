@@ -7,16 +7,16 @@ const api_provider = 'GitHub';
 
 // Get authed user data
 router.get('/user', function(req, res, next) {
-    const user = req.params.username;
+    const user = 'authed_user';
     const data = mkUserData(user);
     const extras = {
         "two_factor_authentication": true,
-        "total_private_repos": 100,
-        "private_gists": 81,
+        "total_private_repos": faker.random.number(100),
+        "private_gists": faker.random.number(81),
         "plan": { "name": "Medium", "space": 400, "private_repos": 20, "collaborators": 0 },
-        "owned_private_repos": 100,
-        "disk_usage": 10000,
-        "collaborators": 8
+        "owned_private_repos": faker.random.number(150),
+        "disk_usage": faker.random.number(15000),
+        "collaborators": faker.random.number(8)
     };
     res.send(Object.assign(data, extras));
 });
@@ -63,7 +63,6 @@ const mkUserData = user => ({
     "login": user,
     "id": faker.random.number({min: 10, max: 1000000}),
     "avatar_url": faker.image.avatar(),
-    "gravatar_id": "",
     "url": "https://api.github.com/users/" + user,
     "html_url": "https://github.com/" + user + "",
     "followers_url": "https://api.github.com/users/" + user + "/followers",
@@ -83,13 +82,13 @@ const mkUserData = user => ({
     "location": faker.address.state(),
     "email": faker.internet.email(),
     "hireable": faker.random.boolean(),
-    "bio": "There once was...",
-    "public_repos": 2,
-    "public_gists": 1,
-    "followers": faker.random.number(),
-    "following": 0,
-    "created_at": "2008-01-14T04:33:35Z",
-    "updated_at": "2008-01-14T04:33:35Z"
+    "bio": faker.random.words(50),
+    "public_repos": faker.random.number(15),
+    "public_gists": faker.random.number(5),
+    "followers": faker.random.number(1500),
+    "following": faker.random.number(100),
+    "created_at": faker.date.past(10),
+    "updated_at": faker.date.recent(30)
 });
 
 router.get('/', (req, res) => {
