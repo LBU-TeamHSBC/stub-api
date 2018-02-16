@@ -7,7 +7,7 @@ const api_provider = 'GitHub';
 
 // Get authed user data
 router.get('/user', function(req, res, next) {
-    const user = 'authed_user';
+    const user = faker.internet.userName();
     const data = mkUserData(user);
     const extras = {
         "two_factor_authentication": true,
@@ -22,7 +22,7 @@ router.get('/user', function(req, res, next) {
 });
 
 
-// Get user details
+// Get unauthed user details
 router.get('/users/:username', function(req, res, next) {
     const user = req.params.username;
     const data = mkUserData(user);
@@ -30,7 +30,7 @@ router.get('/users/:username', function(req, res, next) {
 });
 
 // Get list of repos for user
-router.get('/users/:username/repos', function(req, res, next) {
+router.get('/user/repos', function(req, res, next) {
     data = []
     let repoCount = faker.random.number({min: 1, max: 20});
     for (let i=0; i<repoCount; ++i) {
