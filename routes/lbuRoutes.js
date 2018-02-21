@@ -40,12 +40,13 @@ var courseList = {
 var moduleList = [
     ];
 
-var course_id = Object.keys(courseList)[faker.random.number({max:Object.keys(courseList).length-1})];  
+var course_id = Object.keys(courseList)[0]
+// [faker.random.number({max:Object.keys(courseList).length-1})];  
 
 console.log(course_id);
 
-console.log(courseList[course_id]);
-console.log(faker.random.number({max:Object.values(courseList).length}));
+console.log(courseList[course_id][1]);
+// console.log(faker.random.number({max:Object.values(courseList).length}));
 
 function courseGen(noOfModules) {
     var profile = [];
@@ -65,7 +66,7 @@ function courseGen(noOfModules) {
 
         profile.push({
             "ModuleId" : faker.random.number({max:999999}),
-            "ModuleTitle" : courseList(course_id[index]),
+            "ModuleTitle" : courseList[course_id][index],
             "ModuleCompletion" : faker.random.number({max:100}),
             "Random" : faker.random.word()
         });
