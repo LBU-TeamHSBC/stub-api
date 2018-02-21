@@ -18,16 +18,54 @@ router.get('/user', function(req, res, next) {
 });
 
 
-var courseList = ['Computer Science', 'Business', 'Computing', 'Sports', 'Physiology', 'Electrical Engineering'];
-var moduleList = ['Fundamentals of Computer Science', 'Developing the Computer Scientist', 'Networking', 'Java Fundamentals',
- 'Advanced Java', 'Developing C++ appications', 'Web Development', 'Database Fundamentals'];
+var courseList = {
+    'Computer Science':[
+        'Fundamentals of Computer Science', 
+        'Developing the Computer Scientist',
+        'Networking',
+        'Java Fundamentals',
+        'Advanced Java', 
+        'Developing C++ appications', 
+        'Web Development', 
+        'Database Fundamentals'], 
+    'Business':[], 
+    'Computing':[], 
+    'Sports':[], 
+    'Physiology':[], 
+    'Electrical Engineering':[],
+    'Physics':[],
+    'Chemistry':[]
+};
+
+var moduleList = [
+    ];
+
+var course_id = Object.keys(courseList)[faker.random.number({max:Object.keys(courseList).length-1})];  
+
+console.log(course_id);
+
+console.log(courseList[course_id]);
+console.log(faker.random.number({max:Object.values(courseList).length}));
 
 function courseGen(noOfModules) {
     var profile = [];
+    var used = {};
+    var index;
+
     for (var i = 0; i < noOfModules; i++){
+
+        while(true){
+            index = faker.random.number({max:Object.values(courseList).length});
+
+            if (!used.hasOwnProperty(index)){
+                break;
+            }
+        }
+        used[index] = true;
+
         profile.push({
             "ModuleId" : faker.random.number({max:999999}),
-            "ModuleTitle" : moduleList[Math.floor(Math.random() * moduleList.length)],
+            "ModuleTitle" : courseList(course_id[index]),
             "ModuleCompletion" : faker.random.number({max:100}),
             "Random" : faker.random.word()
         });
@@ -48,8 +86,8 @@ const mkData = user => ({
     "age": faker.random.number({min:16, max:50}),
     "profile": {
         "course": {
-            "id": courseList[Math.floor(Math.random() * courseList.length)],
-            "modules": courseGen(faker.random.number({min:1, max:6})),
+            "id": course_id,
+            "modules": moduleList[course_id[courseGen(faker.random.number({min:1, max:6}))]],
             "attendace": faker.random.number({max:100})
         }
     },
