@@ -2,7 +2,7 @@ var faker = require('faker');
 var express = require('express');
 var router = express.Router();
 
-const version = 'v2.0.0';
+const version = 'v2.0.1';
 const api_provider = 'GitHub';
 
 const user_list = [
@@ -75,6 +75,14 @@ const user_repos_langs = user_list.map(user => {
     ob[user] = repo_langs;
     return ob;
 }).reduce((a,b) => Object.assign(a,b));
+
+router.get('/raw_data', function(req, res, next) {
+    res.json({
+        users,
+        user_repos,
+        user_repos_langs
+    });
+});
 
 // Get authed user data
 router.get('/user', function(req, res, next) {
