@@ -11,6 +11,12 @@ router.get('/user', function(req, res) {
     res.send(data);
 });
 
+router.get('/course', function(req, res) {
+    const user = req.params.username;
+    const data = mkCourse(user);
+    res.send(data);
+});
+
 var courses = ["Blockchain and Bitcoin Fundamentals",
     "AWS Certified Solutions Architect - Associate Practice Tests",
     "The Complete Cyber Security Course : Anonymous Browsing!",
@@ -23,20 +29,54 @@ var courses = ["Blockchain and Bitcoin Fundamentals",
     "REST APIs with Flask and Python",
     "AWS Serverless APIs & Apps - A Complete Introduction"];
 
-var profile = [];
+var courseID = ["77504",
+    "92886",
+    "84982",
+    "50542",
+    "99453",
+    "48069",
+    "51843",
+    "13676",
+    "26095",
+    "16985",
+    "36544"];
 
-function genCourses(noOfCourses) {
+var profile = [];
+var courseProfile = [];
+
+
+function genUsers(noOfCourses) {
 
     profile = [];
 
     for (var i = 0; i < noOfCourses; i++) {
         profile.push(new Object(
             {"CourseTitle" : courses[i],
-                "CourseCompletion" : faker.random.number({max:15})}
+             "CourseCompletion" : faker.random.number({max:15}),
+             "CourseID" : courseID[i]
+            }
         ));
     }
 
     return profile
+}
+
+
+function genCourses() {
+
+    courseProfile = [];
+
+    for (var i = 0; i < courses.length; i++) {
+        courseProfile.push(new Object(
+            {"CourseTitle" : courses[i],
+             "CourseRating" : faker.random.number({max:5}),
+             "CourseUsers" : faker.random.number({max:100000}),
+             "CourseID" : courseID[i]
+            }
+        ));
+    }
+
+    return courseProfile;
 }
 
 var mkData = user => ({
@@ -52,9 +92,15 @@ var mkData = user => ({
     "blog": faker.internet.url(),
     "location": faker.address.state(),
     "email": faker.internet.email(),
-    "Course": genCourses(faker.random.number({min:1,max:10})),
+    "Course": genUsers(faker.random.number({min:1,max:10})),
     "Number of Subscribed Courses" : profile.length,
     "updated_at": faker.date.recent()
+});
+
+var mkCourse = course => ({
+    "Number of Available Courses" : courses.length,
+    "Course" : genCourses()
+
 });
 
 router.get('/', (req, res) => {
