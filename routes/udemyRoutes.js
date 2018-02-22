@@ -83,7 +83,7 @@ var mkData = user => ({
     "login": user,
     "id": parseInt(Math.random() * 1000000, 10),
     "avatar_url": faker.image.avatar(),
-    "name": faker.name.prefix() + " " + faker.name.findName(),
+    "name": faker.name.findName(),
     "age": faker.random.number({min:17, max:45}),
     "company": faker.company.companyName(),
     "job title": faker.name.jobTitle(),

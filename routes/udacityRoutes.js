@@ -8,9 +8,7 @@ const api_provider = 'Udacity';
 router.get('/user', function(req, res, next) {
     const user = req.params.username;
     const data = mkData(user);
-    const extras = {
-            };
-    res.send(Object.assign(data, extras));
+    res.send(data);
 });
 
 var coursesAvailable = [
@@ -41,7 +39,7 @@ const mkData = user => ({
     "id": parseInt(Math.random() * 1000000, 10),
     "Course": genCourses(faker.random.number({max:5})),
     "Number of Subscribed Courses" : profile.length,
-    "name": faker.name.firstName() + " " + faker.name.lastName(),
+    "name": faker.name.findName(),
     "email": faker.internet.email(),
 });
 
