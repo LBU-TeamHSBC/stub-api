@@ -24,23 +24,24 @@ const mkUserData = user => ({
     "company": faker.company.companyName(),
     "blog": faker.internet.url(),
     "bio": faker.random.words(50),
-    "public_repos": faker.random.number({min: 1, max: 15}),
+    "public_repos": faker.random.number({min: 1, max: 5}),
     "public_gists": faker.random.number(5),
     "followers": faker.random.number(1500),
-    "following": faker.random.number(100),
-    "created_at": faker.date.past(10),
-    "updated_at": faker.date.recent(30)
+    "following": faker.random.number(100)
 });
 
 const mkRepoData = _ => ({
     id: faker.random.number({min: 10, max: 1000000}),
     name: faker.lorem.words(2),
-    forks_count: faker.random.number(100)
+    forks_count: faker.random.number(100),
+    stars: faker.random.number(200),
+    created_at: faker.date.past(10),
+    updated_at: faker.date.recent(300)
 });
 
 const mkRepoLangData = _ => {
     const data = {};
-    const langCount = faker.random.number({min: 1, max: 4});
+    const langCount = faker.random.number({min: 1, max: 3});
     for (let i=0; i<langCount; ++i) {
         let idx = faker.random.number(languages.length - 1);
         let lang = languages[idx];
