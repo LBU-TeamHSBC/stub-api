@@ -17,14 +17,58 @@ router.get('/user', function(req, res, next) {
     res.send(Object.assign(data));
 });
 
-var moduleList = ['stuff', 'more stuff', 'even more stuff', 'you get the idea...'];
+
+var courseList = {
+    'Computer Science':[
+        'Fundamentals of Computer Science', 
+        'Developing the Computer Scientist',
+        'Networking',
+        'Java Fundamentals',
+        'Advanced Java', 
+        'Developing C++ appications', 
+        'Web Development', 
+        'Database Fundamentals'], 
+    'Business':[], 
+    'Computing':[], 
+    'Sports':[], 
+    'Physiology':[], 
+    'Electrical Engineering':[],
+    'Physics':[],
+    'Chemistry':[]
+};
+
+var moduleList = [
+    ];
+
+var course_id = Object.keys(courseList)[0]
+// [faker.random.number({max:Object.keys(courseList).length-1})];  
+
+console.log(course_id);
+
+console.log(courseList[course_id][1]);
+// console.log(faker.random.number({max:Object.values(courseList).length}));
 
 function courseGen(noOfModules) {
     var profile = [];
+    var used = {};
+    var index;
+
     for (var i = 0; i < noOfModules; i++){
+
+        while(true){
+            index = faker.random.number({max:Object.values(courseList).length});
+
+            if (!used.hasOwnProperty(index)){
+                break;
+            }
+        }
+        used[index] = true;
+
         profile.push({
-            "ModuleTitle" : moduleList[Math.floor(Math.random() * moduleList.length)],
-            "ModuleCompletion" : faker.random.number({max:100})
+            "ModuleId" : faker.random.number({max:999999}),
+            "ModuleTitle" : courseList[course_id][index],
+            "ModuleCompletion" : faker.random.number({max:100}),
+            "Random" : faker.random.word()
         });
     }
     return profile;
@@ -41,9 +85,12 @@ const mkData = user => ({
     "location": faker.address.country(),
     "email": faker.internet.email(),
     "age": faker.random.number({min:16, max:50}),
-    "Profile:": {
-       "Modules:": courseGen(faker.random.number({min:1, max:moduleList.length - 1})),
-       "Attendace:": faker.random.number({max:100})
+    "profile": {
+        "course": {
+            "id": course_id,
+            "modules": courseGen(faker.random.number({min:1, max:6})),
+            "attendace": faker.random.number({max:100})
+        }
     },
     "created_at": "2008-01-14T04:33:35Z",
     "updated_at": "2008-01-14T04:33:35Z"
