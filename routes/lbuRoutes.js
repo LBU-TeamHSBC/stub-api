@@ -33,6 +33,7 @@ var courseList = {
 
 var course_id = Object.keys(courseList)[0]
 
+
 function courseGen(noOfModules) {
     var profile = [];
     var used = {};
