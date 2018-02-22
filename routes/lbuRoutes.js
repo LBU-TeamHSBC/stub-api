@@ -5,16 +5,10 @@ var router = express.Router();
 const version = 'v1.0.0';
 const api_provider = 'LBU';
 
-router.get('/users/:username', function(req, res, next) {
-    const user = req.params.username;
-    const data = mkData(user)
-    res.send(data);
-});
-
-router.get('/user', function(req, res, next) {
+router.get('/user', function(req, res) {
     const user = req.params.username;
     const data = mkData(user);
-    res.send(Object.assign(data));
+    res.send(data);
 });
 
 
@@ -28,7 +22,7 @@ var courseList = {
         'Developing C++ appications', 
         'Web Development', 
         'Database Fundamentals'], 
-    'Business':[], 
+    'Business':[],
     'Computing':[], 
     'Sports':[], 
     'Physiology':[], 
@@ -37,16 +31,7 @@ var courseList = {
     'Chemistry':[]
 };
 
-var moduleList = [
-    ];
-
 var course_id = Object.keys(courseList)[0]
-// [faker.random.number({max:Object.keys(courseList).length-1})];  
-
-console.log(course_id);
-
-console.log(courseList[course_id][1]);
-// console.log(faker.random.number({max:Object.values(courseList).length}));
 
 function courseGen(noOfModules) {
     var profile = [];
@@ -56,7 +41,7 @@ function courseGen(noOfModules) {
     for (var i = 0; i < noOfModules; i++){
 
         while(true){
-            index = faker.random.number({max:Object.values(courseList).length});
+            index = faker.random.number({max:Object.values(courseList).length-1});
 
             if (!used.hasOwnProperty(index)){
                 break;
@@ -65,7 +50,7 @@ function courseGen(noOfModules) {
         used[index] = true;
 
         profile.push({
-            "ModuleId" : faker.random.number({max:999999}),
+            "ModuleID" : faker.random.number({max:999999}),
             "ModuleTitle" : courseList[course_id][index],
             "ModuleCompletion" : faker.random.number({max:100}),
             "Random" : faker.random.word()
@@ -81,7 +66,7 @@ const mkData = user => ({
     "html_url": "https://leedsbeckett.ac.uk/" + user + "",
     "type": "Student",
     "site_admin": false,
-    "name": faker.name.firstName() + " " + faker.name.lastName(),
+    "name": faker.name.findName(),
     "location": faker.address.country(),
     "email": faker.internet.email(),
     "age": faker.random.number({min:16, max:50}),
@@ -89,11 +74,11 @@ const mkData = user => ({
         "course": {
             "id": course_id,
             "modules": courseGen(faker.random.number({min:1, max:6})),
-            "attendace": faker.random.number({max:100})
+            "attendance": faker.random.number({max:100})
         }
     },
     "created_at": "2008-01-14T04:33:35Z",
-    "updated_at": "2008-01-14T04:33:35Z"
+    "updated_at": faker.date.recent()
 });
 
 router.get('/', (req, res) => {
