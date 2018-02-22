@@ -37,15 +37,10 @@ var courseList = {
     'Chemistry':[]
 };
 
-var moduleList = [
-    ];
-
 var course_id = Object.keys(courseList)[0]
-// [faker.random.number({max:Object.keys(courseList).length-1})];  
 
-console.log(course_id);
-
-console.log(courseList[course_id][1]);
+// console.log(course_id);
+// console.log(courseList[course_id][1]);
 // console.log(faker.random.number({max:Object.values(courseList).length}));
 
 function courseGen(noOfModules) {
@@ -56,7 +51,7 @@ function courseGen(noOfModules) {
     for (var i = 0; i < noOfModules; i++){
 
         while(true){
-            index = faker.random.number({max:Object.values(courseList).length});
+            index = faker.random.number({max:Object.values(courseList).length-1});
 
             if (!used.hasOwnProperty(index)){
                 break;
