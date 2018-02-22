@@ -2,12 +2,83 @@ var faker = require('faker');
 var express = require('express');
 var router = express.Router();
 
-const version = 'v1.0.0';
+const version = 'v2.0.0';
 const api_provider = 'GitHub';
+
+const user_list = [
+    'userA', 'userB', 'userC', 'userD', 'userE', 'userF',
+    'userG', 'userH', 'userI', 'userJ', 'userK', 'userL'
+];
+
+const languages = [
+    'bash', 'c', 'c++', 'go', 'java', 'javascript',
+    'kotlin', 'lua', 'python', 'rust', 'sql', 'php'
+];
+
+const mkUserData = user => ({
+    "login": user,
+    "id": faker.random.number({min: 10, max: 1000000}),
+    "avatar_url": faker.image.avatar(),
+    "type": "User",
+    "name": faker.name.firstName() + " " + faker.name.lastName(),
+    "company": faker.company.companyName(),
+    "blog": faker.internet.url(),
+    "bio": faker.random.words(50),
+    "public_repos": faker.random.number({min: 1, max: 15}),
+    "public_gists": faker.random.number(5),
+    "followers": faker.random.number(1500),
+    "following": faker.random.number(100),
+    "created_at": faker.date.past(10),
+    "updated_at": faker.date.recent(30)
+});
+
+const mkRepoData = _ => ({
+    id: faker.random.number({min: 10, max: 1000000}),
+    name: faker.lorem.words(2),
+    forks_count: faker.random.number(100)
+});
+
+const mkRepoLangData = _ => {
+    const data = {};
+    const langCount = faker.random.number({min: 1, max: 4});
+    for (let i=0; i<langCount; ++i) {
+        let idx = faker.random.number(languages.length - 1);
+        let lang = languages[idx];
+        data[lang] = faker.random.number({min: 1000, max: 90000});
+    }
+    return data;
+};
+
+const users = user_list.map(user => {
+    const a = mkUserData(user);
+    const ob = {};
+    ob[user] = a;
+    return ob;
+}).reduce((a,b) => Object.assign(a,b));
+
+const user_repos = user_list.map(user => {
+    const ob = {};
+    ob[user] = [];
+    for (let i=0; i<users[user]['public_repos']; ++i) {
+        const repo = mkRepoData();
+        ob[user].push(repo);
+    }
+    return ob;
+}).reduce((a,b) => Object.assign(a,b));
+
+const user_repos_langs = user_list.map(user => {
+    const ob = {};
+    const repo_langs = {};
+    for (repo of user_repos[user]) {
+        repo_langs[repo.name] = mkRepoLangData();
+    }
+    ob[user] = repo_langs;
+    return ob;
+}).reduce((a,b) => Object.assign(a,b));
 
 // Get authed user data
 router.get('/user', function(req, res, next) {
-    const user = 'authed_user';
+    const user = faker.internet.userName();
     const data = mkUserData(user);
     const extras = {
         "two_factor_authentication": true,
@@ -18,77 +89,49 @@ router.get('/user', function(req, res, next) {
         "disk_usage": faker.random.number(15000),
         "collaborators": faker.random.number(8)
     };
-    res.send(Object.assign(data, extras));
+    res.json(Object.assign(data, extras));
 });
 
-
-// Get user details
+// Get unauthed user details
 router.get('/users/:username', function(req, res, next) {
     const user = req.params.username;
-    const data = mkUserData(user);
-    res.send(data);
+    if (users.hasOwnProperty(user)) {
+        res.json(users[user]);
+    }
+    res.status(404).send();
 });
 
-// Get list of repos for user
-router.get('/users/:username/repos', function(req, res, next) {
+// Get list of repos for authed user
+router.get('/user/repos', function(req, res, next) {
     data = []
     let repoCount = faker.random.number({min: 1, max: 20});
     for (let i=0; i<repoCount; ++i) {
-        data.push({
-            id: faker.random.number({min: 10, max: 1000000}),
-            name: faker.lorem.words(2),
-            forks_count: faker.random.number(100)
-        });
+        data.push(mkRepoData());
     }
-    res.send(data);
+    res.json(data);
+});
+
+// Get list of repos for user
+router.get('/repos/:username', function(req, res, next) {
+    const user = req.params.username;
+    if (user_repos.hasOwnProperty(user)) {
+        res.json(user_repos[user]);
+        return;
+    }
+    res.status(404).send();
 });
 
 // Get languages for repo
 router.get('/repos/:username/:repo/languages', function(req, res, next) {
-    const data = {};
-    const languages = [
-        'bash', 'c', 'c++', 'go', 'java', 'javascript',
-        'kotlin', 'lua', 'python', 'rust', 'sql'
-    ];
-    const langCount = faker.random.number({min: 1, max: 4});
-    for (let i=0; i<langCount; ++i) {
-        let id = faker.random.number(languages.length - 1);
-        let lang = languages[id];
-        data[lang] = faker.random.number(90000);
+    const user = req.params.username;
+    const repo = req.params.repo;
+    if (user_repos_langs.hasOwnProperty(user)
+            && user_repos_langs[user].hasOwnProperty(repo)) {
+        const langs = user_repos_langs[user][repo];
+        res.json(langs);
+        return;
     }
-    res.send(data)
-});
-
-const mkUserData = user => ({
-    "login": user,
-    "id": faker.random.number({min: 10, max: 1000000}),
-    "avatar_url": faker.image.avatar(),
-    "url": "https://api.github.com/users/" + user,
-    "html_url": "https://github.com/" + user + "",
-    "followers_url": "https://api.github.com/users/" + user + "/followers",
-    "following_url": "https://api.github.com/users/" + user + "/following{/other_user}",
-    "gists_url": "https://api.github.com/users/" + user + "/gists{/gist_id}",
-    "starred_url": "https://api.github.com/users/" + user + "/starred{/owner}{/repo}",
-    "subscriptions_url": "https://api.github.com/users/" + user + "/subscriptions",
-    "organizations_url": "https://api.github.com/users/" + user + "/orgs",
-    "repos_url": "https://api.github.com/users/" + user + "/repos",
-    "events_url": "https://api.github.com/users/" + user + "/events{/privacy}",
-    "received_events_url": "https://api.github.com/users/" + user + "/received_events",
-    "type": "User",
-    "site_admin": false,
-    "name": faker.name.firstName() + " " + faker.name.lastName(),
-    "company": faker.company.companyName(),
-    "blog": faker.internet.url(),
-    "location": faker.address.state(),
-    "email": faker.internet.email(),
-    "hireable": faker.random.boolean(),
-    "bio": faker.random.words(50),
-    "public_repos": faker.random.number(15),
-    "public_gists": faker.random.number(5),
-    "followers": faker.random.number(1500),
-    "following": faker.random.number(100),
-    "created_at": faker.date.past(10),
-    "updated_at": faker.date.recent(30)
+    res.status(404).send();
 });
 
 router.get('/', (req, res) => {
