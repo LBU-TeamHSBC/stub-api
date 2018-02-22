@@ -88,7 +88,7 @@ const mkData = user => ({
     "profile": {
         "course": {
             "id": course_id,
-            "modules": moduleList[course_id[courseGen(faker.random.number({min:1, max:6}))]],
+            "modules": courseGen(faker.random.number({min:1, max:6})),
             "attendace": faker.random.number({max:100})
         }
     },
