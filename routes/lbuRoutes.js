@@ -31,6 +31,17 @@ var courseList = {
     'Chemistry':[]
 };
 
+
+var module_id = [
+    "81215",
+    "89641",
+    "15631",
+    "71915",
+    "31231",
+    "68143",
+    "30249",
+    "29304"];
+
 var course_id = Object.keys(courseList)[0]
 
 
@@ -51,7 +62,7 @@ function courseGen(noOfModules) {
         used[index] = true;
 
         profile.push({
-            "ModuleID" : faker.random.number({max:999999}),
+            "ModuleID" : module_id[index],
             "ModuleTitle" : courseList[course_id][index],
             "ModuleCompletion" : faker.random.number({max:100}),
             "Random" : faker.random.word()
