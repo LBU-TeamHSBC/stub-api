@@ -11,6 +11,10 @@ router.get('/user', function(req, res) {
     res.send(data);
 });
 
+const user_list = [
+    'userA', 'userB', 'userC', 'userD', 'userE', 'userF',
+    'userG', 'userH', 'userI', 'userJ', 'userK', 'userL'
+];
 
 var courseList = {
     'Computer Science':[
@@ -31,24 +35,35 @@ var courseList = {
     'Chemistry':[]
 };
 
+var course_id = [
+    12345,
+    23456,
+    34567,
+    45678,
+    56789,
+    67891,
+    78912,
+    89123
+];
 
 var module_id = [
-    "81215",
-    "89641",
-    "15631",
-    "71915",
-    "31231",
-    "68143",
-    "30249",
-    "29304"];
+    81215,
+    89641,
+    15631,
+    71915,
+    31231,
+    68143,
+    30249,
+    29304
+];
 
-var course_id = Object.keys(courseList)[0]
 
+var name = Object.keys(courseList)[0]
+var index = 0;
 
 function courseGen(noOfModules) {
     var profile = [];
     var used = {};
-    var index;
 
     for (var i = 0; i < noOfModules; i++){
 
@@ -62,35 +77,63 @@ function courseGen(noOfModules) {
         used[index] = true;
 
         profile.push({
-            "ModuleID" : module_id[index],
-            "ModuleTitle" : courseList[course_id][index],
-            "ModuleCompletion" : faker.random.number({max:100}),
-            "Random" : faker.random.word()
+            id: faker.random.number(10000),
+            module_id: faker.random.number(module_id),
+            name: courseList[name][index],
+            weighting: 100/courseGen,
+            progress: faker.random.number(100)
         });
     }
     return profile;
 }
 
-const mkData = user => ({
+const mkUserData = user => ({
     "login": user,
     "id": parseInt(Math.random( 10000000, 10)),
     "url": "https://api.leedsbeckett.ac.uk/students/" + user,
     "html_url": "https://leedsbeckett.ac.uk/" + user + "",
     "type": "Student",
     "site_admin": false,
+    "num_of_courses": 1,
     "name": faker.name.findName(),
     "location": faker.address.country(),
     "email": faker.internet.email(),
     "age": faker.random.number({min:16, max:50}),
-    "profile": {
-        "course": {
-            "id": course_id,
-            "modules": courseGen(faker.random.number({min:1, max:6})),
-            "attendance": faker.random.number({max:100})
-        }
-    },
     "created_at": "2008-01-14T04:33:35Z",
     "updated_at": faker.date.recent()
+});
+
+const mkCourseData = _ => ({
+    course_id: faker.random.number(course_id),
+    name: Object.keys(courseList)[index],
+    rating: faker.random.number(100),
+    participant_count: faker.random.number(200),
+    progress: faker.random.number(100),
+    modules: courseGen(faker.random.number({min:1, max:6}))
+});
+
+const users = user_list.map(user => {
+    const a = mkUserData(user);
+    const ob = {};
+    ob[user] = a;
+    return ob;
+}).reduce((a,b) => Object.assign(a,b));
+
+const user_course_data = user_list.map(user => {
+    const ob = {};
+    ob[user] = [];
+    for (let i=0; i<users[user]['num_of_courses']; ++i) {
+        const mod = mkCourseData();
+        ob[user].push(mod);
+    }
+    return ob;
+}).reduce((a,b) => Object.assign(a,b));
+
+router.get('/raw_data', function(req, res, next) {
+    res.json({
+        users,
+        user_course_data
+    });
 });
 
 router.get('/', (req, res) => {
