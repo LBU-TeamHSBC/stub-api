@@ -5,10 +5,7 @@ var router = express.Router();
 const version = 'v2.0.1';
 const api_provider = 'GitHub';
 
-const user_list = [
-    'userA', 'userB', 'userC', 'userD', 'userE', 'userF',
-    'userG', 'userH', 'userI', 'userJ', 'userK', 'userL'
-];
+const user_list = [1, 2, 3, 4, 5, 6];
 
 const languages = [
     'bash', 'c', 'c++', 'go', 'java', 'javascript',
