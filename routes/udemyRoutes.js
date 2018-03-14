@@ -26,14 +26,14 @@ router.get('/course', function(req, res) {
 });
 
 
-// router.get('/course/:username', function(req, res, next) {
-//     const user = req.params.username;
-//     if (user_course_data.hasOwnProperty(user)) {
-//         res.json(user_course_data[user]);
-//         return;
-//     }
-//     res.status(404).send();
-// });
+router.get('/course/:username', function(req, res, next) {
+    const user = req.params.username;
+    if (user_course_data.hasOwnProperty(user)) {
+        res.json(user_course_data[user]);
+        return;
+    }
+    res.status(404).send();
+});
 
 // router.get('/raw_data', function(req, res, next) {
 //     res.json({
@@ -81,8 +81,9 @@ function genUsers(noOfCourses) {
 
     for (var i = 0; i < noOfCourses; i++) {
         profile.push(new Object(
-            {"CourseTitle" : courses[i],
-                "CourseCompletion" : faker.random.number({max:15}),
+            {
+                "CourseTitle" : courses[i],
+                "CourseCompletion" : faker.random.number({max:100}),
                 "CourseID" : course_id[i]
             }
         ));
@@ -133,19 +134,12 @@ var mkCourse = course => ({
 
 });
 
-// var mkUserData = user => ({
-//     "Course": genUsers(faker.random.number({min:1,max:10})),
-//     "Number of Subscribed Courses" : profile.length,
-// });
+var mkCourseData = user => ({
+    "Course": genUsers(faker.random.number({min:1,max:10})),
+    "Number of Subscribed Courses" : profile.length,
+});
 
-// var mkCourseData = user => ({
-//         course_id: faker.random.number(course_id),
-//          name: ,
 
-// }
-//     "Course": genUsers(faker.random.number({min:1,max:10})),
-//     "Number of Subscribed Courses" : profile.length,
-// });
 
 // const mkCourseData = _ => ({
 //     course_id: faker.random.number(course_id),
@@ -163,15 +157,13 @@ obj[user] = a;
 return obj;
 }).reduce((a,b) => Object.assign(a,b));
 
-// const user_course_data = user_list.map(user => {
-//         const obj = {};
-// obj[user] = [];
-// for (var i=0; i<users[user]['num_of_courses']; ++i) {
-//     const course = mkCourseData();
-//     obj[user].push(course);
-// }
-// return obj;
-// }).reduce((a,b) => Object.assign(a,b));
+const user_course_data = user_list.map(user => {
+        const obj = {};
+obj[user] = [];
+    const course = mkCourseData();
+    obj[user].push(course);
+return obj;
+}).reduce((a,b) => Object.assign(a,b));
 
 
 router.get('/', (req, res) => {
