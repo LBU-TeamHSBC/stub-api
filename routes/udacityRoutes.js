@@ -11,6 +11,19 @@ router.get('/user', function(req, res, next) {
     res.send(data);
 });
 
+router.get('/users/:username', function(req, res, next) {
+    const user = req.params.username;
+    if (users.hasOwnProperty(user)) {
+        res.json(users[user]);
+    }
+    res.status(404).send();
+});
+
+const user_list = [
+    'userA', 'userB', 'userC', 'userD', 'userE', 'userF',
+    'userG', 'userH', 'userI', 'userJ', 'userK', 'userL'
+];
+
 var courses = [
     "Front-End Web Developer Nanodegree",
     "Senior Web Developer Nanodegree",
