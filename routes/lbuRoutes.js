@@ -57,45 +57,28 @@ router.get('/', (req, res) => {
     res.render('api_index', { base_url: req.baseUrl, version, api_provider, endpoints });
 });
 
-const user_list = [
-    'userA', 'userB', 'userC', 'userD', 'userE', 'userF',
-    'userG', 'userH', 'userI', 'userJ', 'userK', 'userL'
-];
+const user_list = [1, 2, 3, 4, 5, 6];
 
-var courseList = {
+const courseList = {
     'Computer Science':[
         'Fundamentals of Computer Science', 'Developing the Computer Scientist', 'Networking', 'Java Fundamentals',
         'Advanced Java', 'Developing C++ appications', 'Web Development', 'Database Fundamentals'
-    ], 
-    'Business':[
-        'Business1','Business2','Business3','Business4',
-        'Business5','Business6','Business7','Business8'
     ],
     'Computing':[
         'comp1','comp2','comp3','comp4',
         'comp5','comp6','comp7','comp8'
-    ], 
-    'Sports':[
-        'sports1','sports2','sports3','sports4',
-        'sports5','sports6','sports7','sports8'
-    ], 
-    'Physiology':[
-        'physio1','physio2','physio3','physio4',
-        'physio5','physio6','physio7','physio8'
-    ], 
+    ],
     'Electrical Engineering':[
         'ElecEng1','ElecEng2','ElecEng3','ElecEng4',
         'ElecEng5','ElecEng6','ElecEng7','ElecEng8',
-    ],
-    'Physics':[
-        'Physics1','Physics2','Physics3','Physics4',
-        'Physics5','Physics6','Physics7','Physics8',
-    ],
-    'Chemistry':[
-        'chem1','chem2','chem3','chem4',
-        'chem5','chem6','chem7','chem8',
     ]
 };
+
+const course_tags = [
+    {java: 89, python: 16, asm: 5, mysql: 12},
+    {java: 12, php: 90, css: 59, html: 80},
+    {c: 85, 'c++': 20, asm: 45},
+]
 
 var course_id = [
     12345,23456,34567,45678,
@@ -111,25 +94,23 @@ var module_id = [
 var index = 0;
 
 function courseGen(noOfModules) {
+    var name = Object.keys(courseList)[index];
     var profile = [];
     var used = {};
-    var name = Object.keys(courseList)[index]    
-
+    
     for (var i = 0; i < noOfModules; i++){
-
         while(true){
-            index = faker.random.number({max:Object.values(courseList).length-1});
-            
-            if (!used.hasOwnProperty(index)){                
+            module_index = faker.random.number({max:(courseList[name].length-1)});
+            if (!used.hasOwnProperty(module_index)){                
                 break;
             }
         }
-        used[index] = true;
-
+        used[module_index] = true;
+        
         profile.push({
             id: faker.random.number(10000),
             module_id: faker.random.number(module_id),
-            name: courseList[name][index],
+            name: courseList[name][module_index],
             weighting: 100/noOfModules,
             progress: faker.random.number(100)
         });
@@ -160,6 +141,7 @@ const mkCourseData = _ => ({
     rating: faker.random.number(100),
     participant_count: faker.random.number(200),
     progress: faker.random.number(100),
+    tags: course_tags[index],
     modules: courseGen(faker.random.number({min:1, max:6}))
 });
 
